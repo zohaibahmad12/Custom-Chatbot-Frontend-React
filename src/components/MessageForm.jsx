@@ -1,4 +1,42 @@
+import { useState } from "react";
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+
 const MessageForm = ({ userInput, setUserInput, handleSubmit, loading }) => {
+  recognition.continuous = true;
+  const [isRecording, setIsRecording] = useState(false);
+
+  const startRecording = () => {
+    setIsRecording(true);
+    setUserInput("");
+    recognition.start();
+  };
+
+  const stopRecording = () => {
+    setIsRecording(false);
+    recognition.stop();
+  };
+
+  recognition.onresult = (event) => {
+    let interimTranscript = "";
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      interimTranscript += event.results[i][0].transcript;
+    }
+    setUserInput((prevUserInput) => prevUserInput + interimTranscript);
+  };
+
+  recognition.onend = () => {
+    if (isRecording) {
+      recognition.start();
+    }
+  };
+
+  recognition.onerror = (event) => {
+    console.error("Speech recognition error:", event.error);
+    setIsRecording(false);
+  };
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -22,6 +60,17 @@ const MessageForm = ({ userInput, setUserInput, handleSubmit, loading }) => {
         disabled={userInput.trim() === ""}
       >
         Send
+      </button>
+      <button
+        type="button"
+        onClick={isRecording ? stopRecording : startRecording}
+        className={
+          isRecording
+            ? "ml-3 py-2 px-4 bg-red-600 text-white rounded-lg shadow-md hover:bg-red-700 transition duration-300 ease-in-out"
+            : "ml-3 py-2 px-4 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition duration-300 ease-in-out"
+        }
+      >
+        {isRecording ? "StopRec" : "StartRec"}
       </button>
     </form>
   );
