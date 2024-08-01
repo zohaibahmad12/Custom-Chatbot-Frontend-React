@@ -53,7 +53,7 @@ const Chatbot = () => {
       <div className="h-full flex flex-col p-4">
         <header className="bg-gray-900 text-white p-4 rounded-t-lg">
           <h1 className="text-2xl font-bold">Chatbot</h1>
-          <p className="text-sm">Ask me anything and I'll try to help!</p>
+          <p className="text-sm">Ask me questions and I'll try to help!</p>
         </header>
         <MessageList
           messages={messages}
