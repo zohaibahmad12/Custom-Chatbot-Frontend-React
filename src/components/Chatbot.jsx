@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import MessageList from "./MessageList";
 import MessageForm from "./MessageForm";
+
 const Chatbot = () => {
   const [userInput, setUserInput] = useState("");
   const [messages, setMessages] = useState([]);
@@ -19,16 +20,24 @@ const Chatbot = () => {
       const res = await axios.post("http://127.0.0.1:5000/ask", {
         question: userInput,
       });
+      console.log(res.data.answer);
+      const botResponse =
+        res.data.answer.trim() === "I don't know."
+          ? "Sorry! I don't have knowledge regarding this."
+          : res.data.answer;
       setMessages([
         ...messages,
         { text: userInput, isUser: true },
-        { text: res.data.answer, isUser: false },
+        { text: botResponse, isUser: false },
       ]);
     } catch (error) {
       setMessages([
         ...messages,
         { text: userInput, isUser: true },
-        { text: "Error fetching response.", isUser: false },
+        {
+          text: "There might be some error in generating response. Please try again later.",
+          isUser: false,
+        },
       ]);
     } finally {
       setLoading(false);
@@ -41,7 +50,11 @@ const Chatbot = () => {
 
   return (
     <div className="w-full lg:w-1/2 p-6 flex-shrink-0">
-      <div className="h-full bg-gradient-to-br from-gray-800 via-gray-700 to-gray-900 rounded-lg shadow-lg flex flex-col p-4">
+      <div className="h-full flex flex-col p-4">
+        <header className="bg-gray-900 text-white p-4 rounded-t-lg">
+          <h1 className="text-2xl font-bold">Chatbot</h1>
+          <p className="text-sm">Ask me anything and I'll try to help!</p>
+        </header>
         <MessageList
           messages={messages}
           loading={loading}

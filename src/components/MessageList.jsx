@@ -3,7 +3,7 @@ import Loader from "./Loader";
 
 const MessageList = ({ messages, loading, chatEndRef }) => {
   return (
-    <div className="flex-1 overflow-auto p-4 bg-gray-900 rounded-t-lg shadow-md space-y-4">
+    <div className="flex-1 overflow-auto p-4 bg-gray-900 shadow-md space-y-4 bg-gradient-to-br from-black via-gray-800 to-gray-900">
       {messages.map((msg, index) => (
         <div
           key={index}
