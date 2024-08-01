@@ -1,41 +1,12 @@
-import { useState } from "react";
-const SpeechRecognition =
-  window.SpeechRecognition || window.webkitSpeechRecognition;
-const recognition = new SpeechRecognition();
+import { useEffect } from "react";
+import useSpeechRecognition from "../hooks/useSpeechRecognition";
 
 const MessageForm = ({ userInput, setUserInput, handleSubmit, loading }) => {
-  recognition.continuous = true;
-  const [isRecording, setIsRecording] = useState(false);
-
-  const startRecording = () => {
-    setIsRecording(true);
-    setUserInput("");
-    recognition.start();
-  };
-
-  const stopRecording = () => {
-    setIsRecording(false);
-    recognition.stop();
-  };
-
-  recognition.onresult = (event) => {
-    let interimTranscript = "";
-    for (let i = event.resultIndex; i < event.results.length; i++) {
-      interimTranscript += event.results[i][0].transcript;
-    }
-    setUserInput((prevUserInput) => prevUserInput + interimTranscript);
-  };
-
-  recognition.onend = () => {
-    if (isRecording) {
-      recognition.start();
-    }
-  };
-
-  recognition.onerror = (event) => {
-    console.error("Speech recognition error:", event.error);
-    setIsRecording(false);
-  };
+  const { isRecording, transcript, startRecording, stopRecording } =
+    useSpeechRecognition();
+  useEffect(() => {
+    setUserInput(transcript);
+  }, [transcript]);
 
   return (
     <form
