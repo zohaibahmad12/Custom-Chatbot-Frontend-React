@@ -1,9 +1,19 @@
+import { useEffect } from "react";
 import Message from "./Message";
 import Loader from "./Loader";
 
 const MessageList = ({ messages, loading, chatEndRef }) => {
+  useEffect(() => {
+    if (messages?.length > 0 && !messages[messages.length - 1]?.isUser) {
+      const msg = new SpeechSynthesisUtterance();
+      msg.text = messages[messages.length - 1]?.text;
+      console.log("called");
+      window.speechSynthesis.speak(msg);
+    }
+  }, [messages]);
+
   return (
-    <div className="flex-1 overflow-auto p-4 bg-gray-900 shadow-md space-y-4 bg-gradient-to-br from-black via-gray-800 to-gray-900">
+    <div className="flex-1 overflow-auto p-4 bg-gray-400">
       {messages.map((msg, index) => (
         <div
           key={index}
