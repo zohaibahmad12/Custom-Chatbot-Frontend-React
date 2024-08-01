@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import Message from "./Message";
 import Loader from "./Loader";
-
+import { memo } from "react";
 const MessageList = ({ messages, loading, chatEndRef }) => {
+  console.log("Message List execute");
   useEffect(() => {
     if (messages?.length > 0 && !messages[messages.length - 1]?.isUser) {
       const msg = new SpeechSynthesisUtterance();
       msg.text = messages[messages.length - 1]?.text;
-      console.log("called");
       window.speechSynthesis.speak(msg);
     }
   }, [messages]);
@@ -34,4 +34,4 @@ const MessageList = ({ messages, loading, chatEndRef }) => {
   );
 };
 
-export default MessageList;
+export default memo(MessageList);

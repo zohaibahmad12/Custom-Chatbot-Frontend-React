@@ -1,4 +1,6 @@
+import { memo } from "react";
 const Message = ({ msg }) => {
+  console.log("Message execute");
   return (
     <div
       className={`p-3 rounded-lg ${
@@ -9,4 +11,4 @@ const Message = ({ msg }) => {
     </div>
   );
 };
-export default Message;
+export default memo(Message);
