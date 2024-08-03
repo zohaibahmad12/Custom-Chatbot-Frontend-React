@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
+import { FaExpandArrowsAlt, FaCompressArrowsAlt } from "react-icons/fa";
 import MessageList from "./MessageList";
 import MessageForm from "./MessageForm";
 
-const Chatbot = () => {
+const Chatbot = ({ maximize, setMaximize }) => {
+  const ResizeIcon = maximize ? FaCompressArrowsAlt : FaExpandArrowsAlt;
   const [userInput, setUserInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -49,11 +51,24 @@ const Chatbot = () => {
   }, [messages]);
 
   return (
-    <div className="w-full lg:w-1/2 p-6 flex-shrink-0">
-      <div className="h-full flex flex-col p-4">
-        <header className="bg-gray-900 text-white p-4 rounded-t-lg">
-          <h1 className="text-2xl font-bold">Chatbot</h1>
-          <p className="text-sm">Ask me questions and I'll try to help!</p>
+    <div
+      className={`w-full ${maximize ? "w-full" : "lg:w-1/2"}  flex-shrink-0 `}
+    >
+      <div className={`h-full flex flex-col ${!maximize && "lg:p-4"}`}>
+        <header
+          className={`bg-blue-500 text-white p-4 ${
+            !maximize && "lg:rounded-t-lg"
+          } flex items-center justify-between`}
+        >
+          <div>
+            <h1 className="text-2xl font-bold">Chatbot</h1>
+            <p className="text-sm">Ask me questions and I'll try to help!</p>
+          </div>
+          <ResizeIcon
+            onClick={() => setMaximize(!maximize)}
+            size={20}
+            className="hidden lg:block cursor-pointer hover:text-gray-400"
+          />
         </header>
         <MessageList
           messages={messages}

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import Message from "./Message";
 import Loader from "./Loader";
 import { memo } from "react";
+import { ThreeDot } from "react-loading-indicators";
 const MessageList = ({ messages, loading, chatEndRef }) => {
   console.log("Message List execute");
   useEffect(() => {
@@ -13,7 +14,7 @@ const MessageList = ({ messages, loading, chatEndRef }) => {
   }, [messages]);
 
   return (
-    <div className="flex-1 overflow-auto p-4 bg-gray-400">
+    <div className="flex-1 overflow-auto p-4 bg-gray-100">
       {messages.map((msg, index) => (
         <div
           key={index}
@@ -23,11 +24,7 @@ const MessageList = ({ messages, loading, chatEndRef }) => {
         </div>
       ))}
       {loading && (
-        <div className="flex justify-start">
-          <div className="p-3 bg-gray-700 text-gray-200 rounded-lg max-w-xs">
-            <Loader />
-          </div>
-        </div>
+        <ThreeDot color="#3169cc" size="small" text="" textColor="blue" />
       )}
       <div ref={chatEndRef} />
     </div>
